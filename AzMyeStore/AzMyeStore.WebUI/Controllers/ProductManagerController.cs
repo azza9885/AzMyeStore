@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using AzMyeStore.Core.Models;
 using AzMyeStore.DataAccess.InMemory;
+using AzMyeStore.Core.ViewModels;
 
 
 namespace AzMyeStore.WebUI.Controllers
@@ -13,10 +14,13 @@ namespace AzMyeStore.WebUI.Controllers
     {
         // GET: ProductManager
         ProductRepository context;
+        ProductCategoryRepository productCategories;
         public ProductManagerController() // creating a context for product repository | this is a constructor , 
                                           // whenever this is called a new context of productrepository is created
         {
             context = new ProductRepository();
+            productCategories = new ProductCategoryRepository();
+
         }
         public ActionResult Index() //Making the Index page return a list of products by pulling in the list from collections list on repository page
 
@@ -27,8 +31,15 @@ namespace AzMyeStore.WebUI.Controllers
 
         public ActionResult Create()  // this method is to display a page to fill in the product details
         {
-            Product product = new Product();
-            return View(product);
+            //this returns a product with all the categories
+
+            //Product product = new Product();   //this only returns a product
+
+            ProductManagerViewModel viewModel = new ProductManagerViewModel();
+
+            viewModel.Product = new Product();
+            viewModel.ProductCategories = productCategories.Collection();
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -60,7 +71,11 @@ namespace AzMyeStore.WebUI.Controllers
 
             else
             {
-                return View(product); //else return the view with the product that we have found
+                ProductManagerViewModel viewModel = new ProductManagerViewModel();
+                viewModel.Product = product;
+                viewModel.ProductCategories = productCategories.Collection();
+
+                return View(viewModel); //else return the view with the product that we have found
             }
         }
 
