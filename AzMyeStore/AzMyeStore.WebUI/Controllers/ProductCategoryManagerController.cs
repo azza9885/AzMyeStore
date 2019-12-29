@@ -5,16 +5,17 @@ using System.Web;
 using System.Web.Mvc;
 using AzMyeStore.Core.Models;
 using AzMyeStore.DataAccess.InMemory;
+using AzMyeStore.Core.Contracts;
 
 namespace AzMyeStore.WebUI.Controllers
 {
     public class ProductCategoryManagerController : Controller
     {
         // GET: ProductCategoryManager
-        InMemoryRepository<ProductCategory> context;
-        public ProductCategoryManagerController()
+        IRepository<ProductCategory> context;
+        public ProductCategoryManagerController(IRepository<ProductCategory> context)
         {
-            context = new InMemoryRepository<ProductCategory>();
+            this.context = context;
         }
 
         public ActionResult Index() //Making the Index page return a list of products by pulling in the list from collections list on repository page

@@ -1,4 +1,5 @@
-﻿using AzMyeStore.Core.Models;
+﻿using AzMyeStore.Core.Contracts;
+using AzMyeStore.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace AzMyeStore.DataAccess.InMemory
 {
-    public class InMemoryRepository<T> where T:BaseEntity  //<T> is an indicator for marking this as a generic class instead of T it can be anyword , 
-                                       //this 'T' used here will be used to indicate usage of this class
-                                       //so when we pass an object for example T it must be of type Base Entity or atleast inherit from BaseEntity
-                                       //because BaseEntity has Id, so that whenever we reference "Id" , our generic class know what that is.
+    public class InMemoryRepository<T> : IRepository<T> where T : BaseEntity  //<T> is an indicator for marking this as a generic class instead of T it can be anyword , 
+                                                                                      //this 'T' used here will be used to indicate usage of this class
+                                                                                      //so when we pass an object for example T it must be of type Base Entity or atleast inherit from BaseEntity
+                                                                                      //because BaseEntity has Id, so that whenever we reference "Id" , our generic class know what that is.
     {
         ObjectCache cache = MemoryCache.Default;
         List<T> items; // list of product or product category.
@@ -28,18 +29,18 @@ namespace AzMyeStore.DataAccess.InMemory
                                          // the name will be "Product" and if we pass product category the name will be "ProductCategory"
             items = cache[className] as List<T>;
 
-                 if(items == null)
+            if (items == null)
             {
                 items = new List<T>();
             }
-            
+
         }
 
         public void Commit()
         {
             cache[className] = items;
         }
-   
+
         public void Insert(T t)
         {
             items.Add(t);
@@ -48,14 +49,14 @@ namespace AzMyeStore.DataAccess.InMemory
         public void Update(T t)
         {
             T tToUpdate = items.Find(p => p.Id == t.Id);  // the "Id" here has to match the exact text case in Base Entity
-                if(tToUpdate != null)
+            if (tToUpdate != null)
             {
                 tToUpdate = t;
             }
 
             else
             {
-                throw new Exception(className +"not found!!!!");
+                throw new Exception(className + "not found!!!!");
             }
         }
 
@@ -67,7 +68,7 @@ namespace AzMyeStore.DataAccess.InMemory
                 return t;
             }
 
-                else
+            else
             {
                 throw new Exception(className + "not found!!!!");
             }
@@ -81,7 +82,7 @@ namespace AzMyeStore.DataAccess.InMemory
         public void Delete(string ID)
         {
             T tToDelete = items.Find(p => p.Id == ID);
-            if(tToDelete != null)
+            if (tToDelete != null)
             {
                 items.Remove(tToDelete);
             }
