@@ -8,9 +8,9 @@ using System.ComponentModel; //added this for adding display name for properties
 
 namespace AzMyeStore.Core.Models
 {
-    public class Product
+    public class Product : BaseEntity
     {
-        public string Id { get; set; }
+        //public string Id { get; set; }
         [StringLength(20)]
         [DisplayName("Product Name")]
         public string Name { get; set; }
@@ -20,10 +20,10 @@ namespace AzMyeStore.Core.Models
         public string Category { get; set; }
         public string Image { get; set; }
 
-        public Product()  // controller for the class product, whenever this class is called a 
-                          // GUID is generated for the product
-        {
-            this.Id = Guid.NewGuid().ToString();
-        }
+        //public Product()  // controller for the class product, whenever this class is called a 
+        //                   //GUID is generated for the product
+        //{
+        //    this.Id = Guid.NewGuid().ToString();
+        //}
     }
 }

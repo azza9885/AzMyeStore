@@ -13,13 +13,13 @@ namespace AzMyeStore.WebUI.Controllers
     public class ProductManagerController : Controller
     {
         // GET: ProductManager
-        ProductRepository context;
-        ProductCategoryRepository productCategories;
+        InMemoryRepository<Product> context;
+        InMemoryRepository<ProductCategory> productCategories;
         public ProductManagerController() // creating a context for product repository | this is a constructor , 
                                           // whenever this is called a new context of productrepository is created
         {
-            context = new ProductRepository();
-            productCategories = new ProductCategoryRepository();
+            context = new InMemoryRepository<Product>();
+            productCategories = new InMemoryRepository<ProductCategory>();
 
         }
         public ActionResult Index() //Making the Index page return a list of products by pulling in the list from collections list on repository page
