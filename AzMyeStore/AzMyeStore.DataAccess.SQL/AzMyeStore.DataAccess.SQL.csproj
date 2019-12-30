@@ -93,11 +93,28 @@
   <ItemGroup>
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\UnityMvcActivator.cs" />
+    <Compile Include="DataContext.cs" />
+    <Compile Include="Migrations\201912300814473_Initial.cs" />
+    <Compile Include="Migrations\201912300814473_Initial.designer.cs">
+      <DependentUpon>201912300814473_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AzMyeStore.Core\AzMyeStore.Core.csproj">
+      <Project>{5A0B315F-DC81-4090-87CD-867A4D2E3074}</Project>
+      <Name>AzMyeStore.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201912300814473_Initial.resx">
+      <DependentUpon>201912300814473_Initial.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
