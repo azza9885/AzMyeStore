@@ -1,6 +1,7 @@
 using AzMyeStore.Core.Contracts;
 using AzMyeStore.Core.Models;
 using AzMyeStore.DataAccess.InMemory;
+using AzMyeStore.DataAccess.SQL;
 using System;
 
 using Unity;
@@ -45,8 +46,13 @@ namespace AzMyeStore.WebUI
 
             // TODO: Register your type's mappings here.
             // container.RegisterType<IProductRepository, ProductRepository>();
-            container.RegisterType<IRepository<Product>, InMemoryRepository<Product>>();
-            container.RegisterType<IRepository<ProductCategory>, InMemoryRepository<ProductCategory>>();
+            //these below two lines should be used when InMemoryRepository is used for storing temp data in the project, 
+            // else if SQL is used the lines these lines should be used , pointing to the SQL repository
+            //container.RegisterType<IRepository<Product>, InMemoryRepository<Product>>();
+            //container.RegisterType<IRepository<ProductCategory>, InMemoryRepository<ProductCategory>>();
+
+            container.RegisterType<IRepository<Product>, SQLRepository<Product>>();
+            container.RegisterType<IRepository<ProductCategory>, SQLRepository<ProductCategory>>();
         }
     }
 }
