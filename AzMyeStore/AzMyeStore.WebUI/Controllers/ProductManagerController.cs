@@ -7,7 +7,7 @@ using AzMyeStore.Core.Models;
 using AzMyeStore.DataAccess.InMemory;
 using AzMyeStore.Core.ViewModels;
 using AzMyeStore.Core.Contracts;
-
+using System.IO;
 
 namespace AzMyeStore.WebUI.Controllers
 {
@@ -45,7 +45,8 @@ namespace AzMyeStore.WebUI.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(Product product) // this method is to post the product details of the newly created product
+        public ActionResult Create(Product product,HttpPostedFileBase file) // this method is to post the product details of the newly created product
+                                                                            //HttpPostedFileBase file , telling the method to expect a file input
         {
             if (!ModelState.IsValid)  //this is neccessary to check to make sure any validation set on the page is correct else return to product list 
                                       //with the neccessary validation errors 
@@ -55,6 +56,16 @@ namespace AzMyeStore.WebUI.Controllers
 
             else
             {
+                if(file != null) // checking if  a file exists because it is possible to create a product without uploading a file
+                {
+                    product.Image = product.Id + Path.GetExtension(file.FileName); //if there is a product then set the image property and it is handy to give name as product ID to make the name unique
+                                                                                   //and add the file extension name
+                                                                                   //added system.IO for Path.GetExtension  where we are passing file's FileName to get the extension of the file
+                                                                                   // then save the file
+                    file.SaveAs(Server.MapPath("//Content//ProductImages//") + product.Image);
+
+
+                }
                 context.Insert(product);
                 context.Commit();
 
@@ -82,7 +93,7 @@ namespace AzMyeStore.WebUI.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(Product product, String Id)  //default template requires to send through the updateed product along with the original product ID
+        public ActionResult Edit(Product product, String Id,HttpPostedFileBase file)  //default template requires to send through the updateed product along with the original product ID
                                                               //just in case you want to update the original product ID
         {
             Product producttoupdate = context.Find(Id);
@@ -100,9 +111,13 @@ namespace AzMyeStore.WebUI.Controllers
                     return View(product);
                 }
 
+                if (file != null)
+                {
+                    producttoupdate.Image = product.Id + Path.GetExtension(file.FileName);
+                    file.SaveAs(Server.MapPath("//Content//ProductImages//") + producttoupdate.Image);
+                }
                 producttoupdate.Category = product.Category;
                 producttoupdate.Description = product.Description;
-                producttoupdate.Image = product.Image;
                 producttoupdate.Name = product.Name;
                 producttoupdate.Price = product.Price;
 
