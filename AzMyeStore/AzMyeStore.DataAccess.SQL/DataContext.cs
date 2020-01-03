@@ -27,6 +27,10 @@ namespace AzMyeStore.DataAccess.SQL
          
         public DbSet<ProductCategory> ProductCategories { get; set; }
 
+        public DbSet<Basket> Baskets { get; set; }
+
+        public DbSet<BasketItem> BasketItems { get; set; }
+
         //now the next step is to physically build our database and this done by running Migration Commands using package manager console
         // to access that go to view--> other windows --> package manager console
 
