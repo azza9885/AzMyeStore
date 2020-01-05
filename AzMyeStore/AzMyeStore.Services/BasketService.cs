@@ -125,7 +125,7 @@ namespace AzMyeStore.Services
             if(item!= null)
             {
                 basket.BasketItems.Remove(item);
-                basketContext.Commit()
+                basketContext.Commit();
             }
 
             
