@@ -1,5 +1,6 @@
 ﻿using AzMyeStore.Core.Contracts;
 using AzMyeStore.Core.Models;
+using AzMyeStore.Core.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ using System.Web;
 
 namespace AzMyeStore.Services
 {
-    public class BasketService
+    public class BasketService : IBasketService
     {
         // the workflow that is being accomplished here : read the cookie from the user and with in that cookie 
         // look for the basket ID and if it found load the basket, if it is not found return an empty inmemory basket
@@ -130,5 +131,59 @@ namespace AzMyeStore.Services
 
             
         }
+
+        public List<BasketItemViewModel> GetBasketItems(HttpContextBase httpContext)
+        {
+            Basket basket = GetBasket(httpContext, false);
+
+            if(basket != null)
+            {
+                var results = (from b in basket.BasketItems
+                              join p in productContext.Collection()
+                              on b.ProductId equals p.Id
+                              select new BasketItemViewModel()
+                              {
+                                  Id = b.Id,
+                                  Quantity = b.Quantity,
+                                  Price = p.Price,
+                                  Image = p.Image,
+                                  ProductName = p.Name
+                              }
+                               ).ToList();
+                return results;
+            }
+
+            else
+            {
+                return new List<BasketItemViewModel>();
+            }
+        }
+
+        //this above method provides a list of all the items in the basket which is good when a user clicks to look at the basket page
+        //however we need to create another method which will provide a BasketSummary i.e the total list of all the items in the basket
+        // and total quantity in the basket for that we need another view model, BasketSummaryViewModel which will have to be created in view models
+
+        public BasketSummaryViewModel GetBasketSummary(HttpContextBase httpContext)
+        {
+            Basket basket = GetBasket(httpContext, false);
+            BasketSummaryViewModel model = new BasketSummaryViewModel(0,0);   //instantiated here because we have a constructor in the BasketSummaryViewModel definition
+
+            if (basket != null)
+            {
+                int? basketCount = (from item in basket.BasketItems select item.Quantity).Sum();
+                decimal? basketTotal = (from item in basket.BasketItems join p in productContext.Collection()
+                                       on item.ProductId equals p.Id select item.Quantity*p.Price).Sum();
+
+                model.BasketCount = basketCount ?? 0;
+                model.BasketTotal = basketTotal ?? decimal.Zero;
+
+                return model;
+
+            }
+            else
+            {
+                return model;
+            }
+        }
     }
-};
+}
