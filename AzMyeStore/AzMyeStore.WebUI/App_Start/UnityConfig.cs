@@ -2,6 +2,7 @@ using AzMyeStore.Core.Contracts;
 using AzMyeStore.Core.Models;
 using AzMyeStore.DataAccess.InMemory;
 using AzMyeStore.DataAccess.SQL;
+using AzMyeStore.Services;
 using System;
 
 using Unity;
@@ -53,6 +54,10 @@ namespace AzMyeStore.WebUI
 
             container.RegisterType<IRepository<Product>, SQLRepository<Product>>();
             container.RegisterType<IRepository<ProductCategory>, SQLRepository<ProductCategory>>();
+            container.RegisterType<IRepository<Basket>, SQLRepository<Basket>>();
+            container.RegisterType<IRepository<BasketItem>, SQLRepository<BasketItem>>();
+            container.RegisterType<IRepository<BasketItem>, SQLRepository<BasketItem>>();
+            container.RegisterType<IBasketService,BasketService>();
         }
     }
 }

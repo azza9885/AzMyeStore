@@ -118,7 +118,10 @@ namespace AzMyeStore.Services
             basketContext.Commit();
         }
 
-        public void RemoveFromBasket(HttpContextBase httpContext, string itemId)
+        public void RemoveFromBasket(HttpContextBase httpContext, string itemId) // when we are removing 
+            //sending the basketitemid rather than the productId like in adding to the basket
+            //cannot use the basketitemid when adding because the basketitemid does not exist before
+            //the product is added to the basket as a basket item
         {
             Basket basket = GetBasket(httpContext, true);
             BasketItem item = basket.BasketItems.FirstOrDefault(i => i.Id == itemId);
